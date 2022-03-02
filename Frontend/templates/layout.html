@@ -16,24 +16,22 @@
         <nav>
             <div class="nav-wrapper">
             <a href="#" class="brand-logo">Trashy Ripoff of Trivia Crack</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <ul id="nav-mobile" class="right hide-on-med-and-down">
 
-                <!-- <li><a href="sass.html">Sass</a></li>
-                <li><a href="badges.html">Components</a></li>
-                <li><a href="collapsible.html">JavaScript</a></li> -->
-            </ul>
+                  <!-- <li><a href="sass.html">Sass</a></li>
+                  <li><a href="badges.html">Components</a></li>
+                  <li><a href="collapsible.html">JavaScript</a></li> -->
+              </ul>
             </div>
         </nav>
     {% endblock %}
+    <div class='container'>
+      {% block body %}
 
+          please log in
 
-    {% if not username %}
-    no name
-    {%else%}
-    name is {{username}}
-    {% endif %}
-
-
+      {% endblock %}
+    </div>
         <!-- Welcome, {{ user }} -->
 <!-- 
         {% for item in user %}

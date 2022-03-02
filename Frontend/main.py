@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 from markupsafe import escape
 import requests
@@ -28,10 +28,16 @@ def main():
         print('**************************************')
         return render_template('layout.html', username=username)
 
-    @app.route('/join')
-    def create_account(username=None, password=None):
+    @app.route('/join', methods=['GET'])
+    def create_account():
+        print('redirecting...')
         return render_template('create_account.html')
 
+    @app.route('/join', methods=['POST'])
+    def create_account_api():
+        print('received account!')
+        print(request)
+        # redirect to home now, with the current user logged in...
 
     app.run()
 
