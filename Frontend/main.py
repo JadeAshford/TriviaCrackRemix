@@ -8,6 +8,8 @@ API_ROOT = 'http://54.205.150.68:3000/'
 
 
 authed_users = []
+# (username, cookie, start time)
+# set a timeout, and remove users from authed_users if it is too old
 
 def main():
     app = Flask(__name__)
@@ -16,6 +18,8 @@ def main():
     @app.route('/<table>/<username>')
     def name_given(table=None, username=None):
         current_user = 'Test User654645'
+
+        
         response = requests.get(API_ROOT + 'user' + f'?username=eq.{current_user}')
         print('**************************************')
         print(response.json())
@@ -40,8 +44,6 @@ def main():
         # redirect to home now, with the current user logged in...
 
     app.run()
-
-
 
 if __name__ == '__main__':
     main()
