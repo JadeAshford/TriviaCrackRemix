@@ -1,10 +1,10 @@
 from crypt import methods
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, make_response, render_template, request, redirect, url_for
 
 from markupsafe import escape
 import requests
 
-import sessions
+from sessions import LoginError, UserSessions
 
 API_ROOT = 'http://54.205.150.68:3000/'
 
@@ -16,7 +16,7 @@ API_ROOT = 'http://54.205.150.68:3000/'
 authed_users = []
 # (username, cookie, start time)
 # set a timeout, and remove users from authed_users if it is too old
-sessions = sessions.UserSessions()
+sessions = UserSessions()
 
 def main():
     app = Flask(__name__)
@@ -28,22 +28,41 @@ def main():
     #Initial login page
     @app.route("/login", methods=['GET'])
     def login():
-        render_template("login.html")
-        response = redirect(url_for("do_that"))
-        response.set_cookie('YourSessionCookie', user.id)
+        # render_template("login.html")
+        # response = redirect(url_for("do_that"))
+        print('forming response')
+        response = make_response(render_template('login.html'))
+        print('setting user')
+
+        print('user')
+        print('setting cookie')
+        response.set_cookie('YourSessionCookie', 'testuser')
+        print('returning')
         return response
 
     #Login page after submitting login details
     @app.route("/login", methods=['POST'])
-    def submit_login(username, password):
-        username = request.get_json
-        password = request.get_json
+    def submit_login():
+        print(request.get_json())
+        username = request.get_json()['username']
+        password = request.get_json()['password']
+
+        # print(f'Username: {username}')
+        # print(f'Password: {password}')
+
         try:
-            print("Attempting long...")
+            print("Attempting login...")
+            # TODO: Fix this line
             sessions.attempt_login(username, password)
-        except sessions.LoginError:
+        except LoginError:
             print("Login failure")
         return render_template("login.html")
+
+
+
+
+
+
 
     #Admin page accessible only after login FIXME
     @app.route("/profile/admin")

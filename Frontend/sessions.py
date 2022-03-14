@@ -41,6 +41,8 @@ class LoggedInUser:
 class UserSessions:
     def __init__(self) -> None:
         self.logged_in_users = []
+        self.API_ROOT = 'http://54.205.150.68:3000/'
+
     def check_cookie(self, cookie) -> string:
         # Check based on cookie sent in request if the user is a currently logged in user
         for user in self.logged_in_users:
@@ -48,9 +50,24 @@ class UserSessions:
                 return user.username
         return ''
 
-    def attempt_login(self, username, password_hash):
+    def _hash_password(self, password):
+        return password
+
+    def attempt_login(self, username, password):
         # make API call to database to check for username
-        api_response = requests.get(API_ROOT + 'user' + f'?username=eq.{username}')
+
+        # test block
+        username = '1'
+        password = '0'
+
+
+        # end test block
+        endpoint = self.API_ROOT + 'user' + f'?username=eq.{username}'
+
+
+
+        api_response = requests.get(endpoint)
+        print(api_response.json())
         body = api_response.json()[0]
 
         # print(api_response.json())
@@ -58,7 +75,7 @@ class UserSessions:
             # User exists in database
             # api_response = api_response.json()
             print(body)
-            if body["password_hash"] == password_hash:
+            if body["password_hash"] == self._hash_password(password):
                 # Password is correct, add to logged in users and issue cookie
                 self.logged_in_users.append(LoggedInUser(body['username']))
                 print("logged in users:")
