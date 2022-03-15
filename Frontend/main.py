@@ -109,6 +109,16 @@ def main():
         print(request)
         # redirect to home now, with the current user logged in...
 
+    @app.route('/test')
+    def test_cookies():
+        
+        cookie = request.cookies.get('YourSessionCookie')
+        if not cookie:
+            return render_template('redirect_login.html')
+        print(cookie)
+        return cookie
+
+
     app.run()
 
 if __name__ == '__main__':
