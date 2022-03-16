@@ -1,35 +1,43 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>It's not Trivia Crack!</title>
-  </head>
-  <body>
-    {%extends "navtemplate.html" %}
-    {% block content %}
-    <div class=" p-1 bg-dark text-white">
-      <h1 class="h1 text-center">Welcome, FIX_USERNAME</h1>
-    </div>
-    <div class="container text-center" style="margin-top: 2rem">
-      <div class="row">
-        <div class="col-sm-4 card bg-dark text-white" style="border-radius: 1rem;">
-          <h2 class="text-center" style="padding: 5px;">Quizzes</h2>
+
+<head>
+  <meta charset="utf-8">
+  <title>It's not Trivia Crack!</title>
+</head>
+
+<body>
+  {%extends "navtemplate.html" %}
+  {% block content %}
+  <div class=" p-1 bg-dark text-white">
+    <h1 class="h1 text-center">Welcome, FIX_USERNAME</h1>
+  </div>
+  <div class="container-fluid text-center" style="margin-top: 2rem">
+    <div class="row g-2">
+      <div class="col-sm-4" style="border-radius: 1rem;">
+        <h2 class="text-center" style="padding: 5px; color: rebeccapurple">Quizzes</h2>
+        <div class="col-md-12 card bg-dark text-white">
         </div>
-        <div class="col-sm-4 card bg-dark text-white" style="border-radius: 1rem;"> 
-          <h2 class="text-center" style="padding: 5px;">Highscores</h2>
+      </div>
+      <div class="col-sm-4" style="border-radius: 1rem;">
+        <h2 class="text-center" style="padding: 5px; color:rebeccapurple;">Highscores</h2>
+        <div class="col-md-12 card bg-dark text-white">
         </div>
-        <div class="col-sm-4 card bg-dark text-white" style="border-radius: 1rem;">
-          <h2 class="text-center" style="padding: 5px;">Something??</h2>
+      </div>
+      <div class="col-sm-4" style="border-radius: 1rem;">
+        <h2 class="text-center" style="padding: 5px; color: rebeccapurple">Something??</h2>
+        <div class="col-md-12 card bg-dark text-white">
           <div class="well">
-           <p>Some text..</p>
+            <p>Some text..</p>
           </div>
           <div class="well">
-           <p>Some text..</p>
+            <p>Some text..</p>
           </div>
         </div>
       </div>
-    </div><br>
-    {% endblock %}
-  </body>
-</html>
+    </div>
+  </div><br>
+  {% endblock %}
+</body>
 
+</html>
