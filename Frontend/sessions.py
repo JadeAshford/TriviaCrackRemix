@@ -35,14 +35,14 @@ class LoggedInUser:
         self.active_time = datetime.now()
         
     def __str__(self) -> str:
-        return f'user: \n\tUsername: {self.username}\n\tLast Activity: {self.active_time}'
+        return f'user: \n\tUsername: {self.username}\n\tLast Activity: {self.active_time}\n Cookie: {self.cookie}'
 
 
 class UserSessions:
     def __init__(self) -> None:
         self.logged_in_users = []
         self.API_ROOT = 'http://54.205.150.68:3000/'
-
+        # self.logged_in_users.append(LoggedInUser('test_user'))
     def check_cookie(self, cookie) -> string:
         # Check based on cookie sent in request if the user is a currently logged in user
         for user in self.logged_in_users:
@@ -53,12 +53,12 @@ class UserSessions:
     def _hash_password(self, password):
         return password
 
-    def attempt_login(self, username, password):
+    def attempt_login(self, username: str, password: str) -> LoggedInUser:
         # make API call to database to check for username
 
         # test block
-        username = '1'
-        password = '0'
+        # username = '1'
+        # password = '0'
 
 
         # end test block
@@ -67,7 +67,7 @@ class UserSessions:
 
 
         api_response = requests.get(endpoint)
-        print(api_response.json())
+        # print(api_response.json())
         body = api_response.json()[0]
 
         # print(api_response.json())
@@ -87,6 +87,18 @@ class UserSessions:
         else:
             # username does not exist
             raise LoginError
+
+
+
+
+
+    def __str__(self):
+        print(self.logged_in_users)
+        to_return = ''
+        for user in self.logged_in_users:
+            to_return += 'user:' + str(user) + '\n'
+            print(to_return)
+        return to_return 
 
 def main():
     # test = LoggedInUser('testuser')

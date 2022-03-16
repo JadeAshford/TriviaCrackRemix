@@ -43,7 +43,10 @@ def main():
     #Login page after submitting login details
     @app.route("/login", methods=['POST'])
     def submit_login():
+        print('GOT POST REQUEST:')
         print(request.get_json())
+        print(dir(request))
+        print(type(request))
         username = request.get_json()['username']
         password = request.get_json()['password']
 
@@ -111,14 +114,21 @@ def main():
 
     @app.route('/test')
     def test_cookies():
-        
+        print('received request')
         cookie = request.cookies.get('YourSessionCookie')
         if not cookie:
+            print('cookie not set!')
             return render_template('redirect_login.html')
-        print(cookie)
+        print(f'attemtping login with cookie: {cookie}')
+        current_user = sessions.attempt_login('1', '0')
+        
+        print(f'Current User: {current_user}')
         return cookie
 
-
+    @app.route('/cookies')
+    def get_sessions():
+        print(sessions)
+        return str(sessions)
     app.run()
 
 if __name__ == '__main__':
