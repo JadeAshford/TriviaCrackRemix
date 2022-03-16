@@ -1,5 +1,5 @@
 from crypt import methods
-from flask import Flask, make_response, render_template, request, redirect, url_for, flash
+from flask import Flask, make_response, render_template, request, redirect, session, url_for, flash
 
 from markupsafe import escape
 import requests
@@ -124,7 +124,12 @@ def main():
     #What should we put here? TODO
     @app.route("/dashboard")
     def dashboard():
-        return render_template("dashboard.html")
+        cookie = request.cookies.get('session')
+        if not cookie:
+            return render_template('redirect_login.html')
+        username = sessions.get_username_by_cookie(cookie)
+        print(f'Username: {username}')
+        return render_template("dashboard.html", username=sessions.get_username_by_cookie(cookie))
 
 
     @app.route('/<table>/<username>')

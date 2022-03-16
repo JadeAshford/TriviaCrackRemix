@@ -59,6 +59,12 @@ class UserSessions:
                 self.logged_in_users.remove[i]
         return
 
+    def get_username_by_cookie(self, cookie) -> str:
+        print(f'Received cookie: {cookie}')
+        for i in range(0, len(self.logged_in_users)):
+            if self.logged_in_users[i].cookie == cookie:
+                print(self.logged_in_users[i])
+                return self.logged_in_users[i].username
 
     def _hash_password(self, password):
         return password
