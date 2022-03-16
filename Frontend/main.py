@@ -66,7 +66,6 @@ def main():
         response.set_cookie('session', cookie_set.cookie)
         return response
 
-
     #Admin page accessible only after login FIXME
     @app.route("/profile/admin")
     def profile_admin():
