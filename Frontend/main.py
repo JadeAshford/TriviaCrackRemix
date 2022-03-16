@@ -177,11 +177,17 @@ def main():
     #Initial quiz creation page
     @app.route('/create_quiz', methods=['GET'])
     def create_quiz(quiz_id):
+        cookie = request.cookies.get('session')
+        if not cookie:
+            return render_template('redirect_login.html')
         return render_template('create_quiz.html')
 
     #Send created quiz data to database
     @app.route('/create_quiz', methods=['POST'])
     def post_quiz(quiz_id):
+        cookie = request.cookies.get('session')
+        if not cookie:
+            return render_template('redirect_login.html')
         return "Quiz received!"
 
     @app.route('/quiz/<quiz_id>', methods=['GET'])
@@ -206,6 +212,9 @@ def main():
 
     @app.route('/admin')
     def admin():
+        cookie = request.cookies.get('session')
+        if not cookie:
+            return render_template('redirect_login.html')
         return render_template('admin.html')
 
     @app.route('/logout')
