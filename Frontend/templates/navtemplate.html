@@ -24,7 +24,9 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
               <div class="navbar-nav">
                   <a href="{{ url_for('home') }}" class="nav-item nav-link active">Home</a>
-                  <a href="{{ url_for('profile') }}" class="nav-item nav-link">Profile</a>
+                  {% if is_logged_in %}
+                  <a href="{{ url_for('profile') }}" class="nav-item nav-link">Create Quiz</a>
+                  {% endif %}
                   {% if is_admin %}
                   <a href="{{ url_for('admin') }}" class="nav-item nav-link">Admin</a>
                   {% endif %}
