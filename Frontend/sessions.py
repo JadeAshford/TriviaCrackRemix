@@ -17,10 +17,13 @@ class LoggedInUser:
     def __init__(self, username) -> None:
         self.username = username
         self.active_time = datetime.now()
-        self.cookie = 'no cookie yet!' # set cookie to hash of username and login time
+        self.cookie = self._generate_cookie() # set cookie to hash of username and login time
         print('logged in:')
         print(self.active_time)
 
+    def _generate_cookie(self) -> str:
+        return f'{self.username}{self.active_time}'
+        
     def is_logged_in(self) -> bool:
         duration = (datetime.now() - self.active_time).total_seconds()
         print(duration)
@@ -50,25 +53,29 @@ class UserSessions:
                 return user.username
         return ''
 
+    def logout_session(self, cookie):
+        for i in len(self.logged_in_users):
+            if i.cookie == cookie:
+                self.logged_in_users.remove[i]
+        return
+
+
     def _hash_password(self, password):
         return password
 
     def attempt_login(self, username: str, password: str) -> LoggedInUser:
         # make API call to database to check for username
 
-        # test block
-        # username = '1'
-        # password = '0'
-
-
-        # end test block
         endpoint = self.API_ROOT + 'user' + f'?username=eq.{username}'
 
 
 
         api_response = requests.get(endpoint)
-        # print(api_response.json())
-        body = api_response.json()[0]
+        print(f'API RESPONSE: {api_response.json()}')
+        if api_response.json():
+            body = api_response.json()[0]
+        else:
+            raise LoginError
 
         # print(api_response.json())
         if api_response.status_code == 200:
@@ -76,11 +83,13 @@ class UserSessions:
             # api_response = api_response.json()
             print(body)
             if body["password_hash"] == self._hash_password(password):
-                # Password is correct, add to logged in users and issue cookie
-                self.logged_in_users.append(LoggedInUser(body['username']))
-                print("logged in users:")
-                for user in self.logged_in_users:
-                    print(user)
+                user = LoggedInUser(body['username'])
+                self.logged_in_users.append(user)
+                return user
+                
+                # print("logged in users:")
+                # for user in self.logged_in_users:
+                #     print(user)
             else:
                 # password is incorrect
                 raise LoginError

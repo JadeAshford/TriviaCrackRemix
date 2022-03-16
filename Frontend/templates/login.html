@@ -9,6 +9,7 @@
 <body>
   {%extends "navtemplate.html" %}
   {% block content %}
+
   <section class="vh-100 gradient-custom">
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
@@ -17,24 +18,27 @@
             <div class="card-body p-5 text-center">
               <form action="/login" method="post">
                 <!-- form>action="/" method="get">  -->
+                {% if failed_login == 1 %}
+                  <h1 class="warning">LOGIN FAILED</h1>
+                {% endif %}
                 <div class="mb-md-5 mt-md-4 pb-5">
 
                   <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
                   <p class="text-white-50 mb-5">Please enter your login and password!</p>
 
                   <div class="form-outline form-white mb-4">
-                    <input type="email" id="username" class="form-control form-control-lg" />
+                    <input name="username" type="text" id="username" class="form-control form-control-lg" />
                     <label class="form-label" for="username">Username</label>
                   </div>
 
                   <div class="form-outline form-white mb-4">
-                    <input type="password" id="password" class="form-control form-control-lg" />
+                    <input name="password" type="password" id="password" class="form-control form-control-lg" />
                     <label class="form-label" for="password">Password</label>
                   </div>
 
                   <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
 
-                  <button class="btn btn-outline-light btn-lg px-5" type="submit" >Login</button>
+                  <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
 
                 </div>
               </form>

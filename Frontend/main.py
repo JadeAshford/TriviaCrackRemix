@@ -1,5 +1,5 @@
 from crypt import methods
-from flask import Flask, make_response, render_template, request, redirect, url_for
+from flask import Flask, make_response, render_template, request, redirect, url_for, flash
 
 from markupsafe import escape
 import requests
@@ -28,15 +28,13 @@ def main():
     #Initial login page
     @app.route("/login", methods=['GET'])
     def login():
-        # render_template("login.html")
-        # response = redirect(url_for("do_that"))
-        print('forming response')
-        response = make_response(render_template('login.html'))
-        print('setting user')
 
-        print('user')
-        print('setting cookie')
-        response.set_cookie('YourSessionCookie', 'testuser')
+        cookie = request.cookies.get('session')
+        if cookie:
+            return render_template('redirect_dashboard.html')
+        response = make_response(render_template('login.html'))
+
+        # TODO: set 'testuser' to actual session value
         print('returning')
         return response
 
@@ -44,11 +42,11 @@ def main():
     @app.route("/login", methods=['POST'])
     def submit_login():
         print('GOT POST REQUEST:')
-        print(request.get_json())
-        print(dir(request))
-        print(type(request))
-        username = request.get_json()['username']
-        password = request.get_json()['password']
+        print(request.form)
+        # print(dir(request))
+        # print(type(request))
+        username = request.form['username']
+        password = request.form['password']
 
         # print(f'Username: {username}')
         # print(f'Password: {password}')
@@ -59,12 +57,14 @@ def main():
             sessions.attempt_login(username, password)
         except LoginError:
             print("Login failure")
-        return render_template("login.html")
-
-
-
-
-
+            # flash('Login incorrect')
+            return render_template('login.html', failed_login=1)
+        
+        # TODO: set a session cookie
+        response = make_response(render_template('redirect_dashboard.html'))
+        cookie_set = sessions.attempt_login(username, password)
+        response.set_cookie('session', cookie_set.cookie)
+        return response
 
 
     #Admin page accessible only after login FIXME
@@ -115,9 +115,8 @@ def main():
     @app.route('/test')
     def test_cookies():
         print('received request')
-        cookie = request.cookies.get('YourSessionCookie')
+        cookie = request.cookies.get('session')
         if not cookie:
-            print('cookie not set!')
             return render_template('redirect_login.html')
         print(f'attemtping login with cookie: {cookie}')
         current_user = sessions.attempt_login('1', '0')
