@@ -179,7 +179,15 @@ def main():
         print(sessions)
         return str(sessions)
 
+    #Initial quiz creation page
+    @app.route('/create_quiz', methods=['GET'])
+    def create_quiz(quiz_id):
+        return render_template('create_quiz.html')
 
+    #Send created quiz data to database
+    @app.route('/create_quiz', methods=['POST'])
+    def post_quiz(quiz_id):
+        return "Quiz received!"
 
     @app.route('/quiz/<quiz_id>', methods=['GET'])
     def take_quiz(quiz_id):
