@@ -66,6 +66,16 @@ class UserSessions:
                 print(self.logged_in_users[i])
                 return self.logged_in_users[i].username
 
+    def check_admin(self, cookie) -> bool:
+        for i in range(0, len(self.logged_in_users)):
+            if self.logged_in_users[i].cookie == cookie:
+                # Make api call to get roles of user
+                roles = ['admin', 'user']
+                if 'admin' in roles:
+                    return True
+                else:
+                    return False
+
     def _hash_password(self, password):
         return password
 
