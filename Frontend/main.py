@@ -10,7 +10,8 @@ API_ROOT = 'http://54.205.150.68:3000/'
 
 
 
-
+def get_next_user_id() -> int:
+    return 6
 
 
 authed_users = []
@@ -30,6 +31,45 @@ def main():
     def create_user():
         #TODO: actually make work
 
+        # If user is already logged in, redirect to dashboard
+        cookie = request.cookies.get('session')
+        if cookie:
+            return render_template('redirect_dashboard.html')
+        return render_template('create_user.html')
+
+           
+    @app.route("/create_user", methods=['POST'])
+    def submit_create_user():
+        cookie = request.cookies.get('session')
+        if cookie:
+            return render_template('redirect_dashboard.html')
+        account_create_data = request.form
+        print(f'username: {account_create_data["username"]}\npassword: {account_create_data["password"]}')
+
+        # Send an API request to postgrest to insert a user
+        endpoint = API_ROOT + 'user'
+        to_send = {}
+        to_send['user_id'] = get_next_user_id()
+        to_send['username'] = account_create_data["username"]
+        to_send['password_hash'] = account_create_data["password"]
+        to_send['role'] = "user"
+        to_send['flagged_count'] = 0
+        response = requests.post(endpoint, to_send)
+
+        if response.status_code == 201:
+            # the user was added to the database successfully
+            response = make_response(render_template('redirect_dashboard.html'))
+            cookie_set = sessions.attempt_login(to_send['username'], to_send['password_hash'])
+            response.set_cookie('session', cookie_set.cookie)
+            return response
+        elif response.status_code == 409:
+            # the user already exists
+            return render_template('create_user.html', creation_failed=1, message='Account already exists')
+        else:
+            # there was a failure to create the account
+            return render_template('create_user.html', creation_failed=1, message='There was a general failure. Please try again')
+
+
     #Initial login page
     @app.route("/login", methods=['GET'])
     def login():
@@ -46,8 +86,8 @@ def main():
     #Login page after submitting login details
     @app.route("/login", methods=['POST'])
     def submit_login():
-        print('GOT POST REQUEST:')
-        print(request.form)
+        # print('GOT POST REQUEST:')
+        # print(request.form)
         # print(dir(request))
         # print(type(request))
         username = request.form['username']

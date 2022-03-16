@@ -23,7 +23,7 @@ class LoggedInUser:
 
     def _generate_cookie(self) -> str:
         return f'{self.username}{self.active_time}'
-        
+
     def is_logged_in(self) -> bool:
         duration = (datetime.now() - self.active_time).total_seconds()
         print(duration)
@@ -51,7 +51,7 @@ class UserSessions:
         for user in self.logged_in_users:
             if user.cookie == cookie:
                 return user.username
-        return ''
+        raise LoginError
 
     def logout_session(self, cookie):
         for i in len(self.logged_in_users):
