@@ -7,10 +7,28 @@
   <body>
     {%extends "navtemplate.html" %}
     {% block content %}
-    <div class="container p-5 bg-dark text-white">
-      <h1 class="h1">This is the dashboard</h1>
-      <p>What should we put here?</p>
+    <div class=" p-1 bg-dark text-white">
+      <h1 class="h1 text-center">Welcome, FIX_USERNAME</h1>
     </div>
+    <div class="container text-center" style="margin-top: 2rem">
+      <div class="row">
+        <div class="col-sm-4 card bg-dark text-white" style="border-radius: 1rem;">
+          <h2 class="text-center" style="padding: 5px;">Quizzes</h2>
+        </div>
+        <div class="col-sm-4 card bg-dark text-white" style="border-radius: 1rem;"> 
+          <h2 class="text-center" style="padding: 5px;">Highscores</h2>
+        </div>
+        <div class="col-sm-4 card bg-dark text-white" style="border-radius: 1rem;">
+          <h2 class="text-center" style="padding: 5px;">Something??</h2>
+          <div class="well">
+           <p>Some text..</p>
+          </div>
+          <div class="well">
+           <p>Some text..</p>
+          </div>
+        </div>
+      </div>
+    </div><br>
     {% endblock %}
   </body>
 </html>
