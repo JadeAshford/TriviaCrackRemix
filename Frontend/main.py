@@ -25,6 +25,11 @@ def main():
     def home():
         return render_template("home.html")
 
+    #Initial create user page
+    @app.route("/create_user", methods=['GET'])
+    def create_user():
+        #TODO: actually make work
+
     #Initial login page
     @app.route("/login", methods=['GET'])
     def login():
