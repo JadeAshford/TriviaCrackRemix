@@ -1,3 +1,4 @@
+from cgi import test
 from crypt import methods
 from flask import Flask, make_response, render_template, request, redirect, session, url_for, flash
 
@@ -177,6 +178,38 @@ def main():
     def get_sessions():
         print(sessions)
         return str(sessions)
+
+
+
+    @app.route('/quiz/<quiz_id>', methods=['GET'])
+    def take_quiz(quiz_id):
+        questions = []
+        test_question = {}
+        test_question['text'] = 'What color is the sky?'
+        test_question['answers'] = []
+        test_question['answers'].append('Blue')
+        test_question['answers'].append('Red')
+        test_question['answers'].append('Green')
+        test_question['answers'].append('Pink')
+        questions.append(test_question)
+        questions.append(test_question)
+        questions.append(test_question)
+        print(questions)
+        return render_template('take_quiz_by_link.html', questions=questions, quiz_id=quiz_id)
+
+    @app.route('/quiz/<quiz_id>', methods=['POST'])
+    def get_quiz_score(quiz_id):
+        return 'Received quiz score!'
+
+    @app.route('/admin')
+    def admin():
+        return render_template('admin.html')
+
+    @app.route('/logout')
+    def logout():
+        return "not yet implemented!"
+
+
     app.run()
 
 if __name__ == '__main__':

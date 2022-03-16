@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>It's not Trivia Crack!</title>
+</head>
+
+<body>
+    {%extends "navtemplate.html" %}
+    {% block content %}
+    <div class=" p-1 bg-dark text-white">
+        <h1 class="h1 text-center">Welcome, {{ username }}</h1>
+    </div>
+    <div class="container-fluid text-center" style="margin-top: 2rem">
+        <form action="{{quiz_id}}" method="post">
+            {% for q in questions %}
+            <li style='align-self: left;'>{{ q.text }}</li>
+                {% for answer in q.answers %}
+                    <p><input type="radio">{{ answer }}</p>
+                {% endfor %}
+            {% endfor %}
+
+            <button type="submit"></button>
+        </form>
+    </div>
+    {% endblock %}
+</body>
+
+</html>
