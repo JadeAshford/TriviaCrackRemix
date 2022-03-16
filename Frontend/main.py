@@ -113,14 +113,9 @@ def main():
         return response
 
     #Admin page accessible only after login FIXME
-    @app.route("/profile/admin")
+    @app.route("/admin")
     def profile_admin():
         return render_template("admin.html")
-
-    #Profile page accessible only after login FIXME
-    @app.route("/profile")
-    def profile():
-        return render_template("profile.html")
 
     #What should we put here? TODO
     @app.route("/dashboard")
@@ -153,7 +148,7 @@ def main():
     @app.route('/join', methods=['GET'])
     def create_account():
         print('redirecting...')
-        return render_template('create_account.html')
+        return render_template('create_user.html')
 
 
     @app.route('/join', methods=['POST'])
