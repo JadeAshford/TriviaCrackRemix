@@ -115,7 +115,10 @@ def main():
     #Admin page accessible only after login FIXME
     @app.route("/admin")
     def profile_admin():
-        return render_template("admin.html")
+        cookie = request.cookies.get('session')
+        if not cookie:
+            return render_template('redirect_login.html')
+        return render_template("admin.html", is_logged_in = 1)
 
     #What should we put here? TODO
     @app.route("/dashboard")
