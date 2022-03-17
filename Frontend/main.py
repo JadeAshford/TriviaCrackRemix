@@ -9,11 +9,9 @@ from sessions import LoginError, UserSessions
 
 API_ROOT = 'http://54.205.150.68:3000/'
 
-
-
 def get_next_user_id() -> int:
-    return 6
-
+    endpoint = API_ROOT + 'user?select=user_id&order=user_id.desc&limit=1'
+    return requests.get(endpoint).json()[0]['user_id'] + 1
 
 authed_users = []
 # (username, cookie, start time)
@@ -30,15 +28,15 @@ def main():
     #Initial create user page
     @app.route("/create_user", methods=['GET'])
     def create_user():
-        #TODO: actually make work
-
-        # If user is already logged in, redirect to dashboard
         cookie = request.cookies.get('session')
-        if cookie:
-            return render_template('redirect_dashboard.html')
-        return render_template('create_user.html')
 
-           
+        # sessions.is_valid_session(cookie)
+        if not cookie:
+            return render_template('create_user.html')
+        if sessions.is_valid_session('cookie'):
+            return render_template('redirect_dashboard.html')
+        return render_template('redirect_login.html')
+
     @app.route("/create_user", methods=['POST'])
     def submit_create_user():
         cookie = request.cookies.get('session')
@@ -74,108 +72,51 @@ def main():
     #Initial login page
     @app.route("/login", methods=['GET'])
     def login():
-
         cookie = request.cookies.get('session')
-        if cookie:
-            return render_template('redirect_dashboard.html')
-        response = make_response(render_template('login.html'))
+        if not cookie:
+            return render_template('login.html')
 
-        # TODO: set 'testuser' to actual session value
-        print('returning')
-        return response
+        if not sessions.is_valid_session(cookie):
+            return render_template('login.html')
 
+        return render_template('redirect_dashboard.html', )
+        
     #Login page after submitting login details
     @app.route("/login", methods=['POST'])
     def submit_login():
-        # print('GOT POST REQUEST:')
-        # print(request.form)
-        # print(dir(request))
-        # print(type(request))
         username = request.form['username']
         password = request.form['password']
 
-        # print(f'Username: {username}')
-        # print(f'Password: {password}')
-
         try:
-            print("Attempting login...")
-            # TODO: Fix this line
             sessions.attempt_login(username, password)
         except LoginError:
-            print("Login failure")
-            # flash('Login incorrect')
             return render_template('login.html', failed_login=1)
         
-        # TODO: set a session cookie
         response = make_response(render_template('redirect_dashboard.html'))
         cookie_set = sessions.attempt_login(username, password)
         response.set_cookie('session', cookie_set.cookie)
         return response
 
-    #Admin page accessible only after login FIXME
-    @app.route("/admin")
-    def profile_admin():
-        cookie = request.cookies.get('session')
-        if not cookie:
-            return render_template('redirect_login.html')
-        return render_template("admin.html", is_logged_in = 1)
 
     #What should we put here? TODO
     @app.route("/dashboard")
     def dashboard():
         cookie = request.cookies.get('session')
+
+        logged_in = sessions.is_valid_session(cookie)
+
         if not cookie:
             return render_template('redirect_login.html')
-        username = sessions.get_username_by_cookie(cookie)
-        print(f'Username: {username}')
-        return render_template("dashboard.html", username=sessions.get_username_by_cookie(cookie))
 
-
-    @app.route('/<table>/<username>')
-    def name_given(table=None, username=None):
-        current_user = 'Test User654645'
-
-        
-        response = requests.get(API_ROOT + 'user' + f'?username=eq.{current_user}')
-        print('**************************************')
-        print(response.json())
-        #user = response.json()
-
-        try:
-            username = response.json()[0]['username']
-        except TypeError:
-            username = None
-        print('**************************************')
-        return render_template('layout.html', username=username)
-
-    @app.route('/join', methods=['GET'])
-    def create_account():
-        print('redirecting...')
-        return render_template('create_user.html')
-
-
-    @app.route('/join', methods=['POST'])
-    def create_account_api():
-        print('received account!')
-        print(request)
-        # redirect to home now, with the current user logged in...
-
-    @app.route('/test')
-    def test_cookies():
-        print('received request')
-        cookie = request.cookies.get('session')
-        if not cookie:
+        if not logged_in:
             return render_template('redirect_login.html')
-        print(f'attemtping login with cookie: {cookie}')
-        current_user = sessions.attempt_login('1', '0')
-        
-        print(f'Current User: {current_user}')
-        return cookie
 
-    @app.route('/cookies')
-    def get_sessions():
-        print(sessions)
-        return str(sessions)
+        if sessions.check_admin(cookie):
+            return render_template('redirect_admin.html')
+
+        return render_template("dashboard.html", username=sessions.get_username_by_cookie(cookie), is_logged_in=logged_in)
+
+
 
     #Initial quiz creation page
     @app.route('/create_quiz', methods=['GET'])
@@ -215,17 +156,66 @@ def main():
 
     @app.route('/admin')
     def admin():
+        print('request at admin endpoint')
         cookie = request.cookies.get('session')
         if not cookie:
             return render_template('redirect_login.html')
-        return render_template('admin.html')
+
+        logged_in = sessions.is_valid_session(cookie)
+        if not sessions.check_admin(cookie):
+            return render_template('redirect_dashboard.html')
+        return render_template('admin.html', is_logged_in=logged_in)
 
     @app.route('/logout')
     def logout():
-        return "not yet implemented!"
+        cookie = request.cookies.get('session')
+        if cookie:
+            sessions.logout_session(cookie)
 
+        response = make_response(render_template('redirect_login.html'))
+        response.delete_cookie('session')
+        return response
 
     app.run()
 
 if __name__ == '__main__':
     main()
+
+
+
+
+
+    # @app.route('/<table>/<username>')
+    # def name_given(table=None, username=None):
+    #     current_user = 'Test User654645'
+
+        
+    #     response = requests.get(API_ROOT + 'user' + f'?username=eq.{current_user}')
+    #     print('**************************************')
+    #     print(response.json())
+    #     #user = response.json()
+
+    #     try:
+    #         username = response.json()[0]['username']
+    #     except TypeError:
+    #         username = None
+    #     print('**************************************')
+    #     return render_template('layout.html', username=username)
+
+
+    # @app.route('/test')
+    # def test_cookies():
+    #     print('received request')
+    #     cookie = request.cookies.get('session')
+    #     if not cookie:
+    #         return render_template('redirect_login.html')
+    #     print(f'attemtping login with cookie: {cookie}')
+    #     current_user = sessions.attempt_login('1', '0')
+        
+    #     print(f'Current User: {current_user}')
+    #     return cookie
+
+    # @app.route('/cookies')
+    # def get_sessions():
+    #     print(sessions)
+    #     return str(sessions)

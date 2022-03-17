@@ -12,7 +12,7 @@
   <body>
     <header>
       <div class="container-fluid p-3" style="background-color: tomato; color: whitesmoke;">
-        <h1 class="display-3">Trivia Crack Rip-Off</h1>
+        <h1 class="display-3">Trivia Crack Rip-Off {{is_logged_in}}</h1>
       </div>
     </header>
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
@@ -25,18 +25,17 @@
               <div class="navbar-nav">
                   <a href="{{ url_for('home') }}" class="nav-item nav-link active">Home</a>
                   {% if is_logged_in %}
-                  <a href="{{ url_for('create_quiz') }}" class="nav-item nav-link">Create Quiz</a>
-                  {% endif %}
-                  {% if is_admin %}
-                  <a href="{{ url_for('admin') }}" class="nav-item nav-link">Admin</a>
+                    <a href="{{ url_for('create_quiz') }}" class="nav-item nav-link">Create Quiz</a>
                   {% endif %}
               </div>
               <div class="navbar-nav ms-auto">
+                {% block logged_in %}
                   {% if is_logged_in %}
                   <a href="{{ url_for('logout') }}" class="nav-item nav-link">Logout</a>
                   {% else %}
                   <a href="{{ url_for('login') }}" class="nav-item nav-link">Login</a>
                   {% endif %}
+                {% endblock %}
               </div>
           </div>
       </div>

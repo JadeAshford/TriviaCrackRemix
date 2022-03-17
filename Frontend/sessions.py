@@ -18,8 +18,6 @@ class LoggedInUser:
         self.username = username
         self.active_time = datetime.now()
         self.cookie = self._generate_cookie() # set cookie to hash of username and login time
-        print('logged in:')
-        print(self.active_time)
 
     def _generate_cookie(self) -> str:
         return f'{self.username}{self.active_time}'
@@ -28,11 +26,9 @@ class LoggedInUser:
         duration = (datetime.now() - self.active_time).total_seconds()
         print(duration)
         if duration < LOGIN_TIMEOUT:
-            self._activity()
-            print('still logged in!')
-            
+            self._activity()   
         else:
-            print('logged out due to timeout!')
+            pass
 
     def _activity(self) -> None:
         self.active_time = datetime.now()
@@ -60,21 +56,33 @@ class UserSessions:
         return
 
     def get_username_by_cookie(self, cookie) -> str:
-        print(f'Received cookie: {cookie}')
+        # print(f'Received cookie: {cookie}')
         for i in range(0, len(self.logged_in_users)):
             if self.logged_in_users[i].cookie == cookie:
-                print(self.logged_in_users[i])
+                # print(self.logged_in_users[i])
                 return self.logged_in_users[i].username
 
     def check_admin(self, cookie) -> bool:
+        print('checking cookie for admin')
         for i in range(0, len(self.logged_in_users)):
+            print(f'users: {self}')
             if self.logged_in_users[i].cookie == cookie:
+                print('cookie is valid')
                 # Make api call to get roles of user
-                roles = ['admin', 'user']
-                if 'admin' in roles:
+                # get the username from the cookie
+                username = self.get_username_by_cookie(cookie)
+                endpoint = self.API_ROOT + 'user' + f'?username=eq.{username}'
+                # print(f'calling endpoint {endpoint}')
+                response = requests.get(endpoint).json()[0]
+                 
+                print(f'RESPONSE:\n\t{response}')
+                if response['role'] == 'admin':
                     return True
                 else:
                     return False
+
+            else:
+                print('INVALID COOKE!')
 
     def _hash_password(self, password):
         return password
@@ -83,29 +91,20 @@ class UserSessions:
         # make API call to database to check for username
 
         endpoint = self.API_ROOT + 'user' + f'?username=eq.{username}'
-
-
-
         api_response = requests.get(endpoint)
-        print(f'API RESPONSE: {api_response.json()}')
+        # print(f'API RESPONSE: {api_response.json()}')
         if api_response.json():
             body = api_response.json()[0]
         else:
             raise LoginError
 
-        # print(api_response.json())
         if api_response.status_code == 200:
             # User exists in database
-            # api_response = api_response.json()
-            print(body)
             if body["password_hash"] == self._hash_password(password):
                 user = LoggedInUser(body['username'])
                 self.logged_in_users.append(user)
                 return user
                 
-                # print("logged in users:")
-                # for user in self.logged_in_users:
-                #     print(user)
             else:
                 # password is incorrect
                 raise LoginError
@@ -114,15 +113,24 @@ class UserSessions:
             raise LoginError
 
 
+    def is_valid_session(self, cookie) -> bool:
+        for i in range(0, len(self.logged_in_users)):
+            if self.logged_in_users[i].cookie == cookie:
+                return True
+        return False
 
-
+    def logout_session(self, cookie) -> None:
+        for i in range(0, len(self.logged_in_users)):
+            if self.logged_in_users[i].cookie == cookie:
+                self.logged_in_users[i]
+                return
 
     def __str__(self):
-        print(self.logged_in_users)
+        # print(self.logged_in_users)
         to_return = ''
         for user in self.logged_in_users:
             to_return += 'user:' + str(user) + '\n'
-            print(to_return)
+            # print(to_return)
         return to_return 
 
 def main():
