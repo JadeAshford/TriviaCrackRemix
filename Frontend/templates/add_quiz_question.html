@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Questions!</title>
+</head>
+
+<body>
+  {%extends "navtemplate.html" %}
+  {% block content %}
+
+  <section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+          <div class="card bg-dark text-white" style="border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+              <form action="/create_question" method="post">
+                <div class="mb-md-5 mt-md-4 pb-5">
+                  <h2 class="fw-bold mb-2 text-uppercase">Give your quiz some questions!</h2>
+                  <h3 class="fw-bold mb-2 text-uppercase">You are currently editing: {{current_title}}</h3>
+
+                  <p class="text-white-50 mb-5">Enter a question!</p>
+
+                  <div class="form-outline form-white mb-4">
+                    <label class="form-label" for="question">Question</label>
+                    <input name="question" type="text" id="question" class="form-control form-control-lg" />
+
+                    <label class="form-label" for="opt_1">Option 1</label>
+                    <textarea class="form-control" rows="3" id="opt_1" name ="opt_1"></textarea>
+                    <label><input type="checkbox" id="opt_cor_1" value="">Is correct?</label>
+
+                    <label class="form-label" for="opt_2">Option 2</label>
+                    <textarea class="form-control" rows="3" id="opt_2" name ="opt_2"></textarea>
+                    <label><input type="checkbox" id="opt_cor_2" value="">Is correct?</label>
+
+                    <label class="form-label" for="opt_3">Option 3</label>
+                    <textarea class="form-control" rows="3" id="opt_3" name ="opt_3"></textarea>
+                    <label><input type="checkbox" id="opt_cor_3" value="">Is correct?</label>
+
+                    <label class="form-label" for="opt_4">Option 4</label>
+                    <textarea class="form-control" rows="3" id="opt_4" name ="opt_4"></textarea>
+                    <label><input type="checkbox" id="opt_cor_4" value="">Is correct?</label>
+                  </div>
+                  <button class="btn btn-outline-light btn-lg px-5" type="submit">Create Question</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endblock %}
+</body>
+
+</html>
