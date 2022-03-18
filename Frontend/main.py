@@ -6,6 +6,7 @@ from markupsafe import escape
 import requests
 
 from sessions import LoginError, UserSessions
+import quizzes
 
 API_ROOT = 'http://54.205.150.68:3000/'
 
@@ -118,21 +119,49 @@ def main():
 
 
 
+
+
+
+
+
+
     #Initial quiz creation page
     @app.route('/create_quiz', methods=['GET'])
-    def create_quiz(quiz_id):
+    def create_quiz():
         cookie = request.cookies.get('session')
-        if not cookie:
+        if not cookie or not sessions.is_valid_session(cookie):
+            print('INVALID COOKIE!')
             return render_template('redirect_login.html')
+
         return render_template('create_quiz.html')
+
+
+
+
 
     #Send created quiz data to database
     @app.route('/create_quiz', methods=['POST'])
-    def post_quiz(quiz_id):
+    def post_quiz():
+        print(f'Received New quiz creation: \n{request.form}')
+
+        # get the next highest quiz ID
+
+
         cookie = request.cookies.get('session')
         if not cookie:
             return render_template('redirect_login.html')
         return "Quiz received!"
+
+
+
+
+
+
+
+
+
+
+
 
     @app.route('/quiz/<quiz_id>', methods=['GET'])
     def take_quiz(quiz_id):

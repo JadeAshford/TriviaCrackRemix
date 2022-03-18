@@ -67,7 +67,6 @@ class UserSessions:
         for i in range(0, len(self.logged_in_users)):
             print(f'users: {self}')
             if self.logged_in_users[i].cookie == cookie:
-                print('cookie is valid')
                 # Make api call to get roles of user
                 # get the username from the cookie
                 username = self.get_username_by_cookie(cookie)
@@ -75,14 +74,13 @@ class UserSessions:
                 # print(f'calling endpoint {endpoint}')
                 response = requests.get(endpoint).json()[0]
                  
-                print(f'RESPONSE:\n\t{response}')
                 if response['role'] == 'admin':
                     return True
                 else:
                     return False
 
             else:
-                print('INVALID COOKE!')
+                return False
 
     def _hash_password(self, password):
         return password
