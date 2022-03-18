@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>It's not Trivia Crack!</title>
+</head>
+
+<body>
+  {%extends "navtemplate.html" %}
+  {% block content %}
+  <div class=" p-1 bg-dark text-white">
+    <h1 class="h1 text-center">Welcome, {{ username }}</h1>
+  </div>
+  <div class="container-fluid text-center" style="margin-top: 2rem">
+    <div class="row g-2">
+      <div class="col-sm-4" style="border-radius: 1rem;">
+        <h2 class="text-center" style="padding: 5px; color: rebeccapurple">All the Quizzes</h2>
+        <div class="col-md-12 card bg-dark text-white">
+          {% for quiz in quizzes%}
+            <div class="well">
+                <p>{{quiz.quiz_name}}</p>
+                <a href="/qui/{{ quiz.quiz_id }}" class="nav-item nav-link">Take Quiz!</a>
+            </div>
+          {%end for%}
+        </div>
+      </div>
+    </div>
+  </div><br>
+  {% endblock %}
+</body>
+
+</html>
