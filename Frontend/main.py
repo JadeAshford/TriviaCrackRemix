@@ -187,7 +187,7 @@ def main():
         return 'Received quiz score!'
 
     @app.route('/admin')
-    def admin():
+    def admin_delete_user():
         print('request at admin endpoint')
         cookie = request.cookies.get('session')
         if not cookie:
