@@ -23,6 +23,14 @@
           <br>
           {% for quiz in quizzes %}
             <a href="/quiz/{{quiz.quiz_id}}" class="h3" style="text-decoration: none">{{quiz.quiz_name}}</a>
+            <ul class="list-inline m-0">
+              <li class="list-inline-item">
+                  <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+              </li>
+              <li class="list-inline-item">
+                  <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
+              </li>
+            </ul>
             <br>
           {% endfor %}
         </div>
