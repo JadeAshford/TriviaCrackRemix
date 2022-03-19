@@ -10,7 +10,7 @@
     {%extends "navtemplate.html" %}
     {% block content %}
     <div class=" p-1 bg-dark text-white">
-        <h1 class="h1 text-center">Welcome, {{ username }}</h1>
+        <h1 class="h1 text-center">{{ quiz_name }}</h1>
     </div>
 
     <div class="container mt-sm-5 my-1">
@@ -22,9 +22,11 @@
                                 <div class="question ml-sm-5 pl-sm-5 pt-2">
                                     <div class="py-2 h5"><h2>{{ q.text }}</h2></div>
                                     <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options"> 
-                                        {% for answer in q.answers %}
-                                        <label class="options">{{ answer }} <input type="radio" name="radio"> <span class="checkmark"></span> </label>
-                                        {% endfor %}
+                                        <ul class="list-group">
+                                            {% for answer in q.answers %}
+                                            <li class="list-group-item">{{ answer }} <input type="checkbox" name="checkbox"> <span class="checkmark"></span> </li>
+                                            {% endfor %}
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -33,6 +35,12 @@
                     {% endfor %}
             </div>
         </div>
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+                <button class="btn btn-outline-light btn-lg px-5" type="submit">Submit Quiz</button>
+            </div>
+        </div>
+        <br>
     </div>
     {% endblock %}
 </body>
