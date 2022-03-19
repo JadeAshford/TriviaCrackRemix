@@ -47,9 +47,11 @@
                     <input name="inp_role" type="text" id="inp_{{user.username}}_role" class="form-control form-control-lg" placeholder="Role..."/>
                     <button class="btn btn-success btn-sm rounded-0" id="submit_{{user.username}}_role" type="button" data-toggle="tooltip" data-placement="top" title="Submit {{user.username}} role change"><i class="fa-solid fa-user-pen"></i>
                 </li>
+                <form action="/admin/delete/{{user.user_id}}" method="post">
                 <li class="list-inline-item">
-                    <button class="btn btn-danger btn-sm rounded-3" id="delete{{user.user_id}}" type="button" data-toggle="tooltip" data-placement="top" title="Delete {{user.username}}"><i class="fa-solid fa-trash-can"></i></i></button>
+                    <button class="btn btn-danger btn-sm rounded-3" id="delete{{user.user_id}}" type="submit" data-toggle="tooltip" data-placement="top" title="Delete {{user.username}}"><i class="fa-solid fa-trash-can"></i></i></button>
                 </li>
+              </form>
             </ul>
               <br>
             {% endfor %}

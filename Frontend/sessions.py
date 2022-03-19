@@ -67,9 +67,9 @@ class UserSessions:
                 return int(self.logged_in_users[i].user_id)
 
     def check_admin(self, cookie) -> bool:
-        print(f'checking cookie: {cookie} for admin')
+        # print(f'checking cookie: {cookie} for admin')
         for i in range(0, len(self.logged_in_users)):
-            print(f'Logged in users: {len(self.logged_in_users)}')
+            # print(f'Logged in users: {len(self.logged_in_users)}')
             # print(self.logged_in_users)
             # print(f'Cookie: {cookie}')
             if self.logged_in_users[i].cookie == cookie:
@@ -77,13 +77,11 @@ class UserSessions:
                 username = self.get_username_by_cookie(cookie)
                 endpoint = self.API_ROOT + 'user' + f'?username=eq.{username}'
                 response = requests.get(endpoint).json()[0]
-                print(f'USER IS A: {response["role"]}')
+                # print(f'USER IS A: {response["role"]}')
                 if response['role'] == 'admin':
                     return True
                 else:
-                    return False
-
-            
+                    return False   
         return False
 
     def _hash_password(self, password):

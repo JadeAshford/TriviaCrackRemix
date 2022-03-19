@@ -190,29 +190,24 @@ def main():
     def get_quiz_score(quiz_id):
         return 'Received quiz score!'
 
-    @app.route('/admin')
+    @app.route('/admin', methods=['GET'])
     def admin():
-        print('request at admin endpoint')
         cookie = request.cookies.get('session')
         if not cookie:
-            print('Cookie is not set')
             return render_template('redirect_login.html')
 
         logged_in = sessions.is_valid_session(cookie)
         if not sessions.check_admin(cookie):
-            print(f'User is not an admin')
-
             return render_template('redirect_dashboard.html')
-        print('User is an admin')
+
         # get a list of all users
         users = get_all_users()
-        print(users)
-        return render_template('admin.html', is_logged_in=logged_in)
+        return render_template('admin.html', is_logged_in=logged_in, users=users)
 
 
 
 
-    @app.route('/admin/delete/<user_id>')
+    @app.route('/admin/delete/<user_id>', methods=['POST'])
     def admin_delete_user(user_id):
         cookie = request.cookies.get('session')
         if not cookie:
@@ -220,7 +215,13 @@ def main():
         logged_in = sessions.is_valid_session(cookie)
         if not sessions.check_admin(cookie):
             return render_template('redirect_dashboard.html')
-        return render_template('admin.html', is_logged_in=logged_in)
+
+        # http://54.205.150.68:3000/user?user_id=eq.100
+        endpoint = API_ROOT + f'user?user_id=eq.{user_id}'
+        print(f'Deleting user {user_id}')
+        response = requests.delete(endpoint)
+        print(response)
+        return render_template('redirect_admin.html')
 
     @app.route('/logout')
     def logout():
