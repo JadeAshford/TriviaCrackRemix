@@ -20,9 +20,10 @@
       <div class="col-sm-4" style="border-radius: 1rem;">
         <h2 class="text-center" style="padding: 5px; color: rebeccapurple">Quizzes</h2>
         <div class="col-md-12 card bg-dark text-white">
+          <br>
           {% for quiz in quizzes %}
-            <p>Link: quiz/{{quiz.quiz_id}}</p>
-            <p>Title: {{quiz.quiz_name}}</p>
+            <a href="/quiz/{{quiz.quiz_id}}" class="h3" style="text-decoration: none">{{quiz.quiz_name}}</a>
+            <br>
           {% endfor %}
         </div>
       </div>
