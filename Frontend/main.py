@@ -14,6 +14,11 @@ def get_next_user_id() -> int:
     endpoint = API_ROOT + 'user?select=user_id&order=user_id.desc&limit=1'
     return requests.get(endpoint).json()[0]['user_id'] + 1
 
+def get_all_users() -> list:
+    endpoint = API_ROOT + 'user'
+    return requests.get(endpoint).json()
+
+
 authed_users = []
 # (username, cookie, start time)
 # set a timeout, and remove users from authed_users if it is too old
@@ -117,7 +122,6 @@ def main():
 
         user_id = sessions.get_user_id_by_cookie(cookie)
         quizzes = get_quizes_by_user_id(user_id)
-        print(quizzes)
         return render_template("dashboard.html", username=sessions.get_username_by_cookie(cookie), is_logged_in=logged_in, quizzes=quizzes)
 
 
@@ -187,22 +191,32 @@ def main():
         return 'Received quiz score!'
 
     @app.route('/admin')
-    def admin_delete_user():
+    def admin():
         print('request at admin endpoint')
         cookie = request.cookies.get('session')
         if not cookie:
+            print('Cookie is not set')
             return render_template('redirect_login.html')
 
         logged_in = sessions.is_valid_session(cookie)
         if not sessions.check_admin(cookie):
+            print(f'User is not an admin')
+
             return render_template('redirect_dashboard.html')
+        print('User is an admin')
+        # get a list of all users
+        users = get_all_users()
+        print(users)
         return render_template('admin.html', is_logged_in=logged_in)
+
+
+
+
     @app.route('/admin/delete/<user_id>')
-    def admin(user_id):
+    def admin_delete_user(user_id):
         cookie = request.cookies.get('session')
         if not cookie:
             return render_template('redirect_login.html')
-
         logged_in = sessions.is_valid_session(cookie)
         if not sessions.check_admin(cookie):
             return render_template('redirect_dashboard.html')
@@ -217,6 +231,9 @@ def main():
         response = make_response(render_template('redirect_login.html'))
         response.delete_cookie('session')
         return response
+    @app.route('/create_question')
+    def create_question():
+        pass
 
     app.run()
 
