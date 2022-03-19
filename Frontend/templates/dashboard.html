@@ -22,18 +22,19 @@
         <div class="col-md-12 card bg-dark text-white">
           <br>
           {% for quiz in quizzes %}
-            <a href="/quiz/{{quiz.quiz_id}}" class="h3" style="text-decoration: none">{{quiz.quiz_name}}</a>
             <ul class="list-inline m-0">
               <li class="list-inline-item">
-                  <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                <a href="/quiz/{{quiz.quiz_id}}" class="h3" style="text-decoration: none">{{quiz.quiz_name}}</a>
               </li>
               <li class="list-inline-item">
-                  <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
+                  <button class="btn btn-danger btn-sm rounded-3" id="delete{{quiz.quiz_id}}" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash-can"></i></i></button>
               </li>
-            </ul>
+          </ul>
             <br>
           {% endfor %}
         </div>
+        <br>
+        <button class="btn btn-outline-dark btn-lg px-5" type="submit">Create Quiz</button>
       </div>
       <div class="col-sm-4" style="border-radius: 1rem;">
         <h2 class="text-center" style="padding: 5px; color:rebeccapurple;">Highscores</h2>

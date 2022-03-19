@@ -7,10 +7,55 @@
   <body>
     {%extends "navtemplate.html" %}
     {% block content %}
-    <div class="container p-5 bg-dark text-white">
-      <h1 class="h1">You are the admin!</h1>
-      <p>What should we put here?</p>
-    </div>
+    <div class="container-fluid text-center" style="margin-top: 2rem">
+      <div class="row g-2">
+        <div class="col-sm-4" style="border-radius: 1rem;">
+          <h2 class="text-center" style="padding: 5px; color: rebeccapurple">Quizzes</h2>
+          <div class="col-md-12 card bg-dark text-white">
+            <br>
+            {% for quiz in quizzes %}
+              <ul class="list-inline m-0">
+                <li class="list-inline-item">
+                  <a href="/quiz/{{quiz.quiz_id}}" class="h3" style="text-decoration: none">{{quiz.quiz_name}}</a>
+                </li>
+                <li class="list-inline-item">
+                    <button class="btn btn-danger btn-sm rounded-3" id="delete{{quiz.quiz_id}}" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash-can"></i></i></button>
+                </li>
+            </ul>
+              <br>
+            {% endfor %}
+          </div>
+          <br>
+          <button class="btn btn-outline-dark btn-lg px-5" type="submit">Create Quiz</button>
+        </div>
+        <div class="col-sm-4" style="border-radius: 1rem;">
+          <h2 class="text-center" style="padding: 5px; color:rebeccapurple;">Highscores</h2>
+          <div class="col-md-12 card bg-dark text-white">
+          </div>
+        </div>
+        <div class="col-sm-4" style="border-radius: 1rem;">
+          <h2 class="text-center" style="padding: 5px; color: rebeccapurple">Users</h2>
+          <div class="col-md-12 card bg-dark text-white">
+            <br>
+            {% for user in users %}
+              <ul class="list-inline m-0">
+                <li class="list-inline-item">
+                  <h2>User ID: {{user.user_id}}</h2>
+                  <h2>Username: {{user.username}}</h2>
+                </li>
+                <li class="list-inline-item">
+                    <button class="btn btn-success btn-sm rounded-0" id="edit_{{user.username}}_role" type="button" data-toggle="tooltip" data-placement="top" title="edit_role"><i class="fa-solid fa-user-pen"></i>
+                </li>
+                <li class="list-inline-item">
+                    <button class="btn btn-danger btn-sm rounded-3" id="delete{{user.user_id}}" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash-can"></i></i></button>
+                </li>
+            </ul>
+              <br>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div><br>
     {% endblock %}
   </body>
 </html>
