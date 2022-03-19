@@ -17,12 +17,10 @@
       <div class="col-sm-4" style="border-radius: 1rem;">
         <h2 class="text-center" style="padding: 5px; color: rebeccapurple">All the Quizzes</h2>
         <div class="col-md-12 card bg-dark text-white">
-          {% for quiz in quizzes%}
-            <div class="well">
-                <p>{{quiz.quiz_name}}</p>
-                <a href="/qui/{{ quiz.quiz_id }}" class="nav-item nav-link">Take Quiz!</a>
-            </div>
-          {%end for%}
+            {% for quiz in quizzes %}
+            <a href="/quiz/{{quiz.quiz_id}}" class="h3" style="text-decoration: none">{{quiz.quiz_name}}</a>
+            <br>
+          {% endfor %}
         </div>
       </div>
     </div>
