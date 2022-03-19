@@ -14,10 +14,11 @@ class LoginError(Exception):
 
 
 class LoggedInUser:
-    def __init__(self, username) -> None:
+    def __init__(self, username, user_id) -> None:
         self.username = username
         self.active_time = datetime.now()
         self.cookie = self._generate_cookie() # set cookie to hash of username and login time
+        self.user_id = user_id
 
     def _generate_cookie(self) -> str:
         return f'{self.username}{self.active_time}'
@@ -34,7 +35,7 @@ class LoggedInUser:
         self.active_time = datetime.now()
         
     def __str__(self) -> str:
-        return f'user: \n\tUsername: {self.username}\n\tLast Activity: {self.active_time}\n Cookie: {self.cookie}'
+        return f'user: \n\tUsername: {self.username}\n\tLast Activity: {self.active_time}\n\tCookie: {self.cookie}\n\tUser_ID: {self.user_id}'
 
 
 class UserSessions:
@@ -61,6 +62,14 @@ class UserSessions:
             if self.logged_in_users[i].cookie == cookie:
                 # print(self.logged_in_users[i])
                 return self.logged_in_users[i].username
+
+
+    def get_user_id_by_cookie(self, cookie) -> int:
+        # print(f'Received cookie: {cookie}')
+        for i in range(0, len(self.logged_in_users)):
+            if self.logged_in_users[i].cookie == cookie:
+                # print(self.logged_in_users[i])
+                return int(self.logged_in_users[i].user_id)
 
     def check_admin(self, cookie) -> bool:
         print('checking cookie for admin')
@@ -99,7 +108,8 @@ class UserSessions:
         if api_response.status_code == 200:
             # User exists in database
             if body["password_hash"] == self._hash_password(password):
-                user = LoggedInUser(body['username'])
+                user = LoggedInUser(body['username'], body['user_id'])
+                
                 self.logged_in_users.append(user)
                 return user
                 
@@ -140,7 +150,6 @@ def main():
 
     # Test a correct login
     sessions.attempt_login('Test User', 'Password Hash')
-
 
     # Test an incorrect password
     try:

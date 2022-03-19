@@ -6,7 +6,7 @@ from markupsafe import escape
 import requests
 
 from sessions import LoginError, UserSessions
-import quizzes
+from quizzes import Quiz, Question, get_quizes_by_user_id
 
 API_ROOT = 'http://54.205.150.68:3000/'
 
@@ -115,7 +115,10 @@ def main():
         if sessions.check_admin(cookie):
             return render_template('redirect_admin.html')
 
-        return render_template("dashboard.html", username=sessions.get_username_by_cookie(cookie), is_logged_in=logged_in)
+        user_id = sessions.get_user_id_by_cookie(cookie)
+        quizzes = get_quizes_by_user_id(user_id)
+
+        return render_template("dashboard.html", username=sessions.get_username_by_cookie(cookie), is_logged_in=logged_in, quizzes=quizzes)
 
 
 

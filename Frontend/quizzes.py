@@ -2,10 +2,14 @@ import requests
 
 
 
-def get_quiz_ids_by_user(user_id):
+def get_quizes_by_user_id(user_id) -> list:
+    print(f'userID: {user_id}')
+    user_id = int(user_id)
     API_ROOT = 'http://54.205.150.68:3000/'
-    endpoint = API_ROOT + 'quiz?order=quiz_id.asc'
-
+    endpoint = API_ROOT + f'quiz?user_id=eq.{user_id}'
+    response = requests.get(endpoint).json()
+    print(response)
+    return response
 
 
 class Question:
@@ -63,14 +67,16 @@ def main():
     my_question.add_answer('red', False)
     my_question.add_answer('pink', False)
     my_question.add_answer('green', False)
-    print(my_question)
+    # print(my_question)
 
     my_quiz = Quiz('6')
+    quizzes = get_quizes_by_user_id(6)
+    print(quizzes)
 
 
 
 
-    print(f'Next Quiz ID: {my_quiz.get_next_quiz_id()}')
+    # print(f'Next Quiz ID: {my_quiz.get_next_quiz_id()}')
 
 
 if __name__ == '__main__':
