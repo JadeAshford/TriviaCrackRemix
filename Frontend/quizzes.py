@@ -8,7 +8,6 @@ def get_quizes_by_user_id(user_id) -> list:
     API_ROOT = 'http://54.205.150.68:3000/'
     endpoint = API_ROOT + f'quiz?user_id=eq.{user_id}'
     response = requests.get(endpoint).json()
-    print(response)
     return response
 
 
