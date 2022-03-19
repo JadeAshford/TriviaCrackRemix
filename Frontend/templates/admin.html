@@ -19,7 +19,7 @@
                   <a href="/quiz/{{quiz.quiz_id}}" class="h3" style="text-decoration: none">{{quiz.quiz_name}}</a>
                 </li>
                 <li class="list-inline-item">
-                    <button class="btn btn-danger btn-sm rounded-3" id="delete{{quiz.quiz_id}}" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash-can"></i></i></button>
+                    <button class="btn btn-danger btn-sm rounded-3" id="delete{{quiz.quiz_id}}" type="button" data-toggle="tooltip" data-placement="top" title="Delete {{quiz.quiz_name}}"><i class="fa-solid fa-trash-can"></i></i></button>
                 </li>
             </ul>
               <br>
@@ -44,10 +44,11 @@
                   <h2>Username: {{user.username}}</h2>
                 </li>
                 <li class="list-inline-item">
-                    <button class="btn btn-success btn-sm rounded-0" id="edit_{{user.username}}_role" type="button" data-toggle="tooltip" data-placement="top" title="edit_role"><i class="fa-solid fa-user-pen"></i>
+                    <input name="inp_role" type="text" id="inp_{{user.username}}_role" class="form-control form-control-lg" placeholder="Role..."/>
+                    <button class="btn btn-success btn-sm rounded-0" id="submit_{{user.username}}_role" type="button" data-toggle="tooltip" data-placement="top" title="Submit {{user.username}} role change"><i class="fa-solid fa-user-pen"></i>
                 </li>
                 <li class="list-inline-item">
-                    <button class="btn btn-danger btn-sm rounded-3" id="delete{{user.user_id}}" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash-can"></i></i></button>
+                    <button class="btn btn-danger btn-sm rounded-3" id="delete{{user.user_id}}" type="button" data-toggle="tooltip" data-placement="top" title="Delete {{user.username}}"><i class="fa-solid fa-trash-can"></i></i></button>
                 </li>
             </ul>
               <br>
