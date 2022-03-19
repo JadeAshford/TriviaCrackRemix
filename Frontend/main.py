@@ -117,7 +117,7 @@ def main():
 
         user_id = sessions.get_user_id_by_cookie(cookie)
         quizzes = get_quizes_by_user_id(user_id)
-
+        print(quizzes)
         return render_template("dashboard.html", username=sessions.get_username_by_cookie(cookie), is_logged_in=logged_in, quizzes=quizzes)
 
 
@@ -189,6 +189,16 @@ def main():
     @app.route('/admin')
     def admin():
         print('request at admin endpoint')
+        cookie = request.cookies.get('session')
+        if not cookie:
+            return render_template('redirect_login.html')
+
+        logged_in = sessions.is_valid_session(cookie)
+        if not sessions.check_admin(cookie):
+            return render_template('redirect_dashboard.html')
+        return render_template('admin.html', is_logged_in=logged_in)
+    @app.route('/admin/delete/<user_id>')
+    def admin(user_id):
         cookie = request.cookies.get('session')
         if not cookie:
             return render_template('redirect_login.html')
