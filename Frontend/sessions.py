@@ -69,7 +69,7 @@ class UserSessions:
     def check_admin(self, cookie) -> bool:
         print(f'checking cookie: {cookie} for admin')
         for i in range(0, len(self.logged_in_users)):
-            print(f'Logged in users: {len(self.logged_in_users})')
+            print(f'Logged in users: {len(self.logged_in_users)}')
             # print(self.logged_in_users)
             # print(f'Cookie: {cookie}')
             if self.logged_in_users[i].cookie == cookie:
@@ -83,8 +83,8 @@ class UserSessions:
                 else:
                     return False
 
-            else:
-                return False
+            
+        return False
 
     def _hash_password(self, password):
         return password
