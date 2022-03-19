@@ -25,7 +25,6 @@ class LoggedInUser:
 
     def is_logged_in(self) -> bool:
         duration = (datetime.now() - self.active_time).total_seconds()
-        print(duration)
         if duration < LOGIN_TIMEOUT:
             self._activity()   
         else:
@@ -57,32 +56,28 @@ class UserSessions:
         return
 
     def get_username_by_cookie(self, cookie) -> str:
-        # print(f'Received cookie: {cookie}')
         for i in range(0, len(self.logged_in_users)):
             if self.logged_in_users[i].cookie == cookie:
-                # print(self.logged_in_users[i])
                 return self.logged_in_users[i].username
 
 
     def get_user_id_by_cookie(self, cookie) -> int:
-        # print(f'Received cookie: {cookie}')
         for i in range(0, len(self.logged_in_users)):
             if self.logged_in_users[i].cookie == cookie:
-                # print(self.logged_in_users[i])
                 return int(self.logged_in_users[i].user_id)
 
     def check_admin(self, cookie) -> bool:
-        print('checking cookie for admin')
+        print(f'checking cookie: {cookie} for admin')
         for i in range(0, len(self.logged_in_users)):
-            print(f'users: {self}')
+            print(f'Logged in users: {len(self.logged_in_users})')
+            # print(self.logged_in_users)
+            # print(f'Cookie: {cookie}')
             if self.logged_in_users[i].cookie == cookie:
-                # Make api call to get roles of user
-                # get the username from the cookie
+                # print(f'Session: {self.logged_in_users[i]}')
                 username = self.get_username_by_cookie(cookie)
                 endpoint = self.API_ROOT + 'user' + f'?username=eq.{username}'
-                # print(f'calling endpoint {endpoint}')
                 response = requests.get(endpoint).json()[0]
-                 
+                print(f'USER IS A: {response["role"]}')
                 if response['role'] == 'admin':
                     return True
                 else:
@@ -99,7 +94,6 @@ class UserSessions:
 
         endpoint = self.API_ROOT + 'user' + f'?username=eq.{username}'
         api_response = requests.get(endpoint)
-        # print(f'API RESPONSE: {api_response.json()}')
         if api_response.json():
             body = api_response.json()[0]
         else:
@@ -134,11 +128,9 @@ class UserSessions:
                 return
 
     def __str__(self):
-        # print(self.logged_in_users)
         to_return = ''
         for user in self.logged_in_users:
             to_return += 'user:' + str(user) + '\n'
-            # print(to_return)
         return to_return 
 
 def main():
@@ -163,6 +155,12 @@ def main():
     except LoginError:
         print('caught incorrect username successfully')
 
+    sessions.attempt_login('1', '0')
+    for user in sessions.logged_in_users:
+        print(f'Username: {user.username}')
+        print(user.cookie)
+        print(sessions.check_admin(user.cookie))
+        print('\n\n\n')
 
 if __name__ == '__main__':
     API_ROOT = 'http://54.205.150.68:3000/'
