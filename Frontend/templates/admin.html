@@ -9,7 +9,7 @@
 <body>
   {%extends "navtemplate.html" %}
   {% block content %}
-  <div class="container-fluid text-center" style="margin-top: 2rem">
+  <div class="container-fluid text-center align-content-center" style="margin-top: 2rem">
     <div class="row g-2">
       <div class="col-sm-4" style="border-radius: 1rem;">
         <h2 class="text-center" style="padding: 5px; color: rebeccapurple">Quizzes</h2>
@@ -33,18 +33,18 @@
         <button class="btn btn-outline-dark btn-lg px-5" type="submit">Create Quiz</button>
       </div>
 
-      <div class="col-sm-4" style="border-radius: 1rem;">
+      <!--<div class="col-sm-4" style="border-radius: 1rem;">
         <h2 class="text-center" style="padding: 5px; color:rebeccapurple;">Highscores</h2>
         <div class="col-md-12 card bg-dark text-white">
         </div>
-      </div>
+      </div> -->
 
       <div class="col-sm-4" style="border-radius: 1rem;">
         <h2 class="text-center" style="padding: 5px; color: rebeccapurple">Users</h2>
         <div class="col-md-12 card bg-dark text-white">
           <br>
           {% for user in users %}
-          <ul class="list-group m-0">
+          <ul class="list-group m-0 align-items-center">
             <li class="list-inline-item">
               <h5>User ID: {{user.user_id}}, Username: {{user.username}}</h5>
             </li>
@@ -52,13 +52,13 @@
               <form action="admin/user/role" method="post">
                 <div class="form-group">
                   <input name="new_role" type="text" id="inp_{{user.username}}_role"
-                    class="form-control form-control-lg" placeholder="Enter a new role" />
+                    class="form-control form-control-lg" placeholder="Enter a new role" size="12"/>
                   <div class="input-group-append">
                     <button class="btn btn-success btn-sm rounded-3" id="submit_{{user.username}}_role" type="submit"
                       data-toggle="tooltip" data-placement="top" title="Submit {{user.username}} role change">
                     <i class="fa-solid fa-user-pen"></i>
                   </div>
-                  <input type="hidden" name="user_id" value="{{user.user_id}}" size="1" />
+                  <input type="hidden" name="user_id" value="{{user.user_id}}" size="0" />
               </form>
               <form action="/admin/delete/{{user.user_id}}" method="post">
                 <button class="btn btn-danger btn-sm rounded-3" id="delete{{user.user_id}}" type="submit"
