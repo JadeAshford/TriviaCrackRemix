@@ -13,16 +13,17 @@
     <h1 class="h1 text-center">Welcome, {{ username }}</h1>
   </div>
 
-{% for quiz in quizzes %}
-  <p>Link: quiz/{{quiz.quiz_id}}</p>
-  <p>Title: {{quiz.quiz_name}}</p>
-{% endfor %}
+
 
   <div class="container-fluid text-center" style="margin-top: 2rem">
     <div class="row g-2">
       <div class="col-sm-4" style="border-radius: 1rem;">
         <h2 class="text-center" style="padding: 5px; color: rebeccapurple">Quizzes</h2>
         <div class="col-md-12 card bg-dark text-white">
+          {% for quiz in quizzes %}
+            <p>Link: quiz/{{quiz.quiz_id}}</p>
+            <p>Title: {{quiz.quiz_name}}</p>
+          {% endfor %}
         </div>
       </div>
       <div class="col-sm-4" style="border-radius: 1rem;">
