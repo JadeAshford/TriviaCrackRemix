@@ -16,7 +16,7 @@
     <div class="container mt-sm-5 my-1">
         <div class="row d-flex justify-content-center align-items-center h-100 g-6 gy-2">
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                {% for q in questions %}
+                {% for q in questions %} <!-- This uses Jinja2 to pipe questions via "for" loop into a given quiz-->
                 <div class="card bg-dark text-white" style="border-radius: 1rem;">
                     <div class="card-body p-5 text-center">
                         <div class="question ml-sm-5 pl-sm-5 pt-2">

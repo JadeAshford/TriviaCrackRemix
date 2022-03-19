@@ -17,7 +17,6 @@
           <div class="card bg-dark text-white" style="border-radius: 1rem;">
             <div class="card-body p-5 text-center">
               <form action="/login" method="post">
-                <!-- form>action="/" method="get">  -->
                 {% if failed_login == 1 %}
                   <h1 class="text-danger">LOGIN FAILED</h1>
                 {% endif %}
@@ -35,8 +34,6 @@
                     <input name="password" type="password" id="password" class="form-control form-control-lg" data-toggle="password"/>
                     <label class="form-label" for="password">Password</label>
                   </div>
-
-                  <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
 
                   <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
 

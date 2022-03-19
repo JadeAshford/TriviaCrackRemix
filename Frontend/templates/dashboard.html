@@ -21,7 +21,7 @@
         <h2 class="text-center" style="padding: 5px; color: rebeccapurple">Quizzes</h2>
         <div class="col-md-12 card bg-dark text-white">
           <br>
-          {% for quiz in quizzes %}
+          {% for quiz in quizzes %} <!-- This uses Jinja2 to pipe quiz information via "for" loop into the quiz list -->
             <ul class="list-inline m-0">
               <li class="list-inline-item">
                 <a href="/quiz/{{quiz.quiz_id}}" class="h3" style="text-decoration: none">{{quiz.quiz_name}}</a>
