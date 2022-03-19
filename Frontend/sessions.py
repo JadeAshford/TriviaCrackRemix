@@ -49,6 +49,10 @@ class UserSessions:
                 return user.username
         raise LoginError
 
+
+
+
+
     def logout_session(self, cookie):
         for i in len(self.logged_in_users):
             if i.cookie == cookie:
@@ -159,6 +163,7 @@ def main():
         print(user.cookie)
         print(sessions.check_admin(user.cookie))
         print('\n\n\n')
+
 
 if __name__ == '__main__':
     API_ROOT = 'http://54.205.150.68:3000/'

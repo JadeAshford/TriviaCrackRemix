@@ -1,9 +1,11 @@
 from cgi import test
 from crypt import methods
+from distutils.dep_util import newer_group
 from flask import Flask, make_response, render_template, request, redirect, session, url_for, flash
 
 from markupsafe import escape
 import requests
+import json
 
 from sessions import LoginError, UserSessions
 from quizzes import Quiz, Question, get_quizes_by_user_id
@@ -15,9 +17,12 @@ def get_next_user_id() -> int:
     return requests.get(endpoint).json()[0]['user_id'] + 1
 
 def get_all_users() -> list:
-    endpoint = API_ROOT + 'user'
+    endpoint = API_ROOT + 'user?order=user_id.asc'
     return requests.get(endpoint).json()
 
+def get_single_user(user_id):
+    endpoint = API_ROOT + f'user?order=user_id.asc&user_id=eq.{user_id}'
+    return requests.get(endpoint).json()
 
 authed_users = []
 # (username, cookie, start time)
@@ -108,7 +113,6 @@ def main():
     @app.route("/dashboard")
     def dashboard():
         cookie = request.cookies.get('session')
-
         logged_in = sessions.is_valid_session(cookie)
 
         if not cookie:
@@ -124,14 +128,6 @@ def main():
         quizzes = get_quizes_by_user_id(user_id)
         return render_template("dashboard.html", username=sessions.get_username_by_cookie(cookie), is_logged_in=logged_in, quizzes=quizzes)
 
-
-
-
-
-
-
-
-
     #Initial quiz creation page
     @app.route('/create_quiz', methods=['GET'])
     def create_quiz():
@@ -142,32 +138,16 @@ def main():
 
         return render_template('create_quiz.html')
 
-
-
-
-
     #Send created quiz data to database
     @app.route('/create_quiz', methods=['POST'])
     def post_quiz():
-        print(f'Received New quiz creation: \n{request.form}')
+        print(f'Received New quiz creation: \n{request.form["quiz_name"]}')
 
         # get the next highest quiz ID
-
-
         cookie = request.cookies.get('session')
         if not cookie:
             return render_template('redirect_login.html')
         return "Quiz received!"
-
-
-
-
-
-
-
-
-
-
 
 
     @app.route('/quiz/<quiz_id>', methods=['GET'])
@@ -218,10 +198,46 @@ def main():
 
         # http://54.205.150.68:3000/user?user_id=eq.100
         endpoint = API_ROOT + f'user?user_id=eq.{user_id}'
-        print(f'Deleting user {user_id}')
         response = requests.delete(endpoint)
-        print(response)
         return render_template('redirect_admin.html')
+
+    @app.route('/admin/user/role/', methods=['POST'])
+    def admin_modify_user_role():
+        cookie = request.cookies.get('session')
+        if not cookie:
+            return render_template('redirect_login.html')
+        logged_in = sessions.is_valid_session(cookie)
+        if not sessions.check_admin(cookie):
+            return render_template('redirect_dashboard.html')
+        role = request.form["new_role"]
+        user_id = request.form['user_id']
+        user = get_single_user(user_id)[0]
+        user['role'] = role
+        # username = request.form['username']
+        # password_hash = request.form['password_hash']
+
+    # "user_id": 100,
+    # "role": "admin",
+    # "username": "testuser200",
+    # "password_hash": "a",
+    # "flagged_count": 0
+        endpoint = API_ROOT + 'user'
+        to_send = {}
+        to_send['user_id'] = user['user_id']
+        to_send['username'] = user['username']
+        to_send['password_hash'] = user['password_hash']
+        to_send['role'] = role
+        to_send['flagged_count'] = user['flagged_count']
+        to_send = json.dumps([to_send])
+        print(f'Sending: {to_send}')
+        response = requests.post(endpoint, to_send, headers={"Prefer": "resolution=merge-duplicates"})
+        print(response)
+        print(response.text)
+        return render_template('redirect_admin.html')
+
+
+
+
 
     @app.route('/logout')
     def logout():
