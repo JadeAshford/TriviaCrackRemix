@@ -158,11 +158,16 @@ def main():
         test_question['answers'] = []
         test_question['answers'].append('Blue')
         test_question['answers'].append('Red')
-        test_question['answers'].append('Green')
+        test_question['answers'].append('Purple')
         test_question['answers'].append('Pink')
         questions.append(test_question)
+
+        test_question['text'] = 'What is Kate\'s favorite color?'
         questions.append(test_question)
+
+        test_question['text'] = 'What color is Red and Blue combined?'
         questions.append(test_question)
+        
         print(questions)
         return render_template('take_quiz_by_link.html', questions=questions, quiz_id=quiz_id)
 
@@ -213,14 +218,6 @@ def main():
         user_id = request.form['user_id']
         user = get_single_user(user_id)[0]
         user['role'] = role
-        # username = request.form['username']
-        # password_hash = request.form['password_hash']
-
-    # "user_id": 100,
-    # "role": "admin",
-    # "username": "testuser200",
-    # "password_hash": "a",
-    # "flagged_count": 0
         endpoint = API_ROOT + 'user'
         to_send = {}
         to_send['user_id'] = user['user_id']
