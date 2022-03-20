@@ -15,13 +15,13 @@
 
 
 
-  <div class="container-fluid text-center" style="margin-top: 2rem">
-    <div class="row g-2">
+  <div class="container-fluid text-center align-content-center" style="margin-top: 2rem">
+    <div class="row g-2 align-items-center">
       <div class="col-sm-4" style="border-radius: 1rem;">
         <h2 class="text-center" style="padding: 5px; color: rebeccapurple">Quizzes</h2>
         <div class="col-md-12 card bg-dark text-white">
           <br>
-          {% for quiz in quizzes %}
+          {% for quiz in quizzes %} <!-- This uses Jinja2 to pipe quiz information via "for" loop into the quiz list -->
             <ul class="list-inline m-0">
               <li class="list-inline-item">
                 <a href="/quiz/{{quiz.quiz_id}}" class="h3" style="text-decoration: none">{{quiz.quiz_name}}</a>
@@ -36,7 +36,8 @@
         <br>
         <button class="btn btn-outline-dark btn-lg px-5" type="submit">Create Quiz</button>
       </div>
-      <div class="col-sm-4" style="border-radius: 1rem;">
+      
+      <!-- <div class="col-sm-4" style="border-radius: 1rem;">
         <h2 class="text-center" style="padding: 5px; color:rebeccapurple;">Highscores</h2>
         <div class="col-md-12 card bg-dark text-white">
         </div>
@@ -51,7 +52,8 @@
             <p>Some text..</p>
           </div>
         </div>
-      </div>
+      </div> -->
+      
     </div>
   </div><br>
   {% endblock %}
