@@ -16,6 +16,10 @@ def get_next_user_id() -> int:
     endpoint = API_ROOT + 'user?select=user_id&order=user_id.desc&limit=1'
     return requests.get(endpoint).json()[0]['user_id'] + 1
 
+def get_next_quiz_id() -> int:
+    endpoint = API_ROOT + 'user?select=quiz_id&order=quiz_id.desc&limit=1'
+    return requests.get(endpoint).json()[0]['quiz_id'] + 1
+
 def get_all_users() -> list:
     endpoint = API_ROOT + 'user?order=user_id.asc'
     return requests.get(endpoint).json()
@@ -140,21 +144,33 @@ def main():
     @app.route('/create_quiz', methods=['POST'])
     def post_quiz():
         print(f'Received New quiz creation: \n{request.form["quiz_name"]}')
-
         # get the next highest quiz ID
         cookie = request.cookies.get('session')
         if not cookie:
             return render_template('redirect_login.html')
 
-        account_create_data = request.form
+        quiz_name = request.form['quiz_name']
         endpoint = API_ROOT + 'quiz'
         to_send = {}
         to_send['quiz_id'] = get_next_quiz_id()
-        to_send['user_id'] = get_user_id()
-        to_send['quiz_name'] = "quiz_name"
+        to_send['user_id'] = sessions.get_user_id_by_cookie(cookie)
+        to_send['quiz_name'] = quiz_name
         response = requests.post(endpoint, to_send)
-
+        print(response)
         return render_template('redirect_add_questions.html')
+
+    @app.route('/add_question/<quiz_id>', methods=['GET'])
+    def add_question_to_quiz_form(quiz_id):
+        cookie = request.cookies.get('session')
+        if not cookie:
+            return render_template('redirect_login.html')
+        
+
+    @app.route('/add_question/<quiz_id>', methods=['POST'])
+    def receive_question_add_to_quiz(quiz_id):
+        cookie = request.cookies.get('session')
+        if not cookie:
+            return render_template('redirect_login.html') 
 
 
     @app.route('/quiz/<quiz_id>', methods=['GET'])
