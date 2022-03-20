@@ -164,6 +164,7 @@ def main():
         cookie = request.cookies.get('session')
         if not cookie:
             return render_template('redirect_login.html')
+        return render_template('redirect_add_questions', quiz_id=quiz_id)
         
 
     @app.route('/add_question/<quiz_id>', methods=['POST'])
