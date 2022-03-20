@@ -108,8 +108,6 @@ def main():
         response.set_cookie('session', cookie_set.cookie)
         return response
 
-
-    #What should we put here? TODO
     @app.route("/dashboard")
     def dashboard():
         cookie = request.cookies.get('session')
@@ -147,7 +145,16 @@ def main():
         cookie = request.cookies.get('session')
         if not cookie:
             return render_template('redirect_login.html')
-        return "Quiz received!"
+
+        account_create_data = request.form
+        endpoint = API_ROOT + 'quiz'
+        to_send = {}
+        to_send['quiz_id'] = get_next_quiz_id()
+        to_send['user_id'] = get_user_id()
+        to_send['quiz_name'] = "quiz_name"
+        response = requests.post(endpoint, to_send)
+
+        return render_template('redirect_add_questions.html')
 
 
     @app.route('/quiz/<quiz_id>', methods=['GET'])
