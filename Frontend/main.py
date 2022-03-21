@@ -18,7 +18,10 @@ def get_next_user_id() -> int:
 
 def get_next_quiz_id() -> int:
     endpoint = API_ROOT + 'user?select=quiz_id&order=quiz_id.desc&limit=1'
-    return requests.get(endpoint).json()[0]['quiz_id'] + 1
+    try:
+        return requests.get(endpoint).json()[0]['quiz_id'] + 1
+    except KeyError:
+        return 1
 
 def get_all_users() -> list:
     endpoint = API_ROOT + 'user?order=user_id.asc'
@@ -157,7 +160,7 @@ def main():
         to_send['quiz_name'] = quiz_name
         response = requests.post(endpoint, to_send)
         print(response)
-        return render_template('redirect_add_questions.html')
+        return render_template('redirect_add_questions.html', quiz_id=to_send['quiz_id'])
 
     @app.route('/add_question/<quiz_id>', methods=['GET'])
     def add_question_to_quiz_form(quiz_id):
@@ -269,9 +272,7 @@ def main():
         response = make_response(render_template('redirect_login.html'))
         response.delete_cookie('session')
         return response
-    @app.route('/create_question')
-    def create_question():
-        pass
+
 
     app.run()
 
