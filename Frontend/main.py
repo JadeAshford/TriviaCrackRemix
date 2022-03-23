@@ -200,7 +200,7 @@ def main():
 
     @app.route('/quiz/<quiz_id>', methods=['POST'])
     def get_quiz_score(quiz_id):
-        return 'Received quiz score!'
+        return render_template('redirect_dashboard.html')
 
     @app.route('/admin', methods=['GET'])
     def admin():
